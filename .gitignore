@@ -1,0 +1,6 @@
+*.vscode/
+*.pdf
+docs/
+research/
+*.DS_Store
+*.out
