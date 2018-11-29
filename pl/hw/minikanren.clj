@@ -52,7 +52,7 @@
     [ lst ]
     ( [ [ head . tail ] ] (evensizeo tail)))
 
-(l/defne splito
+(l/defne splito ;; DOESNT WORK
     "Succeeds when splitting lst gives a and b. The first, third, fifth, etc. elements of lst go to a, while the second, fourth, sixth, etc. elements go to b."
     [lst a b]
     ([ [] [] [] ])
