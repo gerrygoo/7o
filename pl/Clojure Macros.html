@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">    
+    <meta name="author" content="Ariel Ortiz">               
+    <link title="Curso de ArielOrtiz.info" rel="stylesheet" href="Clojure%20Macros_files/general.css">
+    <link rel="stylesheet" href="Clojure%20Macros_files/code.css">
+    <link rel="stylesheet" href="Clojure%20Macros_files/materia.css">
+    <link rel="stylesheet" href="Clojure%20Macros_files/simple.css">
+    <title>Clojure Macros</title>    
+</head>
+
+<body>
+
+    <div id="cuerpo">    
+           
+    <img src="Clojure%20Macros_files/notas.png" alt="" width="128" height="130">
+    
+    <h1>Clojure Macros</h1>
+    
+    <h2>Conventional Java Compilation</h2>
+    
+    <img class="indenta" src="Clojure%20Macros_files/java_compilation.png" alt="Java compilation diagram." width="178" height="420">
+    
+    <h2>Clojure Compilation</h2>
+    
+    <img class="indenta" src="Clojure%20Macros_files/clojure_compilation.png" alt="Clojure compilation diagram." width="682" height="412">
+    
+    <h2>Macro API</h2>
+    
+    <table>
+        <tbody><tr>
+            <th>
+                Function/Macro/Special Form
+            </th>
+            <th>
+                Description
+            </th>
+        </tr>
+        <tr>
+            <td class="mono">
+                (<strong>defmacro</strong> <em>name</em><br>   &nbsp;&nbsp;[<em>params</em>*] <br> 
+                &nbsp;&nbsp;<em>body</em>)
+            </td>
+            <td>
+                Like <code>defn</code>, but the resulting function <em>name</em> is declared as a macro and will be used as a macro by the compiler when it is called.
+            </td>    
+        </tr>
+        
+        <tr>
+            <td class="mono">
+                (<strong>macroexpand-1</strong> <em>form</em>)
+            </td>
+            <td>
+                If <em>form</em> represents a macro form, returns its expansion, else returns <em>form</em>.
+            </td>    
+        </tr>
+        
+        <tr>
+            <td class="mono">
+                (<strong>macroexpand-all</strong> <em>form</em>)
+            </td>
+            <td>
+                Recursively performs all possible macroexpansions in <em>form</em>. You must import the namespace <code>clojure.walk</code> in order to use it.                
+            </td>    
+        </tr>
+        
+        <tr>
+            <td class="mono">
+                `<em>form</em>
+            </td>
+            <td>
+                <p>
+                    <strong>Syntax-quote</strong>. For all forms other than symbols, lists, vectors, sets and maps, <code>`x</code> is the same as <code>'x</code>.    
+                </p>
+                
+                <p>
+                    For symbols, syntax-quote resolves the symbol in the
+ current context, yielding a fully-qualified symbol (i.e. <code>namespace/name</code> or <code>fully.qualified.Classname</code>).
+ If a symbol is non-namespace-qualified and ends with "#", it is 
+resolved to a generated symbol with the same name and a unique id 
+suffix. For example, <code>x#</code> might resolve to <code>x__66__auto__</code>. All references to that symbol within a syntax-quoted expression resolve to the same generated symbol.    
+                </p>
+                
+                <p>
+                    For lists/vectors/sets/maps, syntax-quote 
+establishes a template of the corresponding data structure. Within a 
+template, unqualified forms behave as if recursively syntax-quoted, but 
+forms can be exempted from such recursive quoting by qualifying them 
+with <strong>unquote</strong> and <strong>unquote-splicing</strong> (see below).                 
+                </p>     
+            </td>    
+        </tr>
+        
+        <tr>
+            <td class="mono">
+                ~<em>form</em>
+            </td>
+            <td>
+                <strong>Unquote</strong>. Within a template, <em>form</em> will be treated as an expression to be replaced by its value.                
+            </td>    
+        </tr>
+        
+        <tr>
+            <td class="mono">
+                ~@<em>form</em>
+            </td>
+            <td>
+                <strong>Unquote-splicing</strong>. Within a template, <em>form</em> will be treated as an expression (that must evaluate to a collection) to be replaced by its sequence of values.
+            </td>    
+        </tr>
+        
+    </tbody></table>
+    
+    <p>
+        Examples:
+    </p>
+    
+<pre style="margin: 0; line-height: 125%"><span style="color: #333333">`</span>(<span style="color: #0000DD; font-weight: bold">42</span> <span style="color: #007020">map </span><span style="color: #996633">f</span> [<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #0000DD; font-weight: bold">3</span>])   <span style="font-size: 150%">⇒</span> (<span style="color: #0000DD; font-weight: bold">42</span> <span style="color: #996633">clojure.core/map</span> <span style="color: #996633">user/f</span> [<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #0000DD; font-weight: bold">3</span>])
+
+<span style="color: #333333">`</span>(<span style="color: #0066BB; font-weight: bold">a</span> <span style="color: #996633">b#</span> <span style="color: #996633">c</span> <span style="color: #996633">b#</span>)          <span style="font-size: 150%">⇒</span> (<span style="color: #0066BB; font-weight: bold">user/a</span> <span style="color: #996633">b__46__auto__</span> <span style="color: #996633">user/c</span> <span style="color: #996633">b__46__auto__</span>)
+
+<span style="color: #333333">`</span>(<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> (<span style="color: #007020">+ </span><span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span>))        <span style="font-size: 150%">⇒</span> (<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> (<span style="color: #0066BB; font-weight: bold">clojure.core/+</span> <span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span>))
+
+<span style="color: #333333">`</span>(<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #333333">~</span>(<span style="color: #007020">+ </span><span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span>))       <span style="font-size: 150%">⇒</span> (<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #0000DD; font-weight: bold">3</span>)
+
+<span style="color: #333333">`</span>(<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> (<span style="color: #007020">range </span><span style="color: #0000DD; font-weight: bold">5</span>))      <span style="font-size: 150%">⇒</span> (<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> (<span style="color: #0066BB; font-weight: bold">clojure.core/range</span> <span style="color: #0000DD; font-weight: bold">5</span>))
+ 
+<span style="color: #333333">`</span>(<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #333333">~</span>(<span style="color: #007020">range </span><span style="color: #0000DD; font-weight: bold">5</span>))     <span style="font-size: 150%">⇒</span> (<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> (<span style="color: #0000DD; font-weight: bold">0</span> <span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #0000DD; font-weight: bold">4</span>))
+
+<span style="color: #333333">`</span>(<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #333333">~@</span>(<span style="color: #007020">range </span><span style="color: #0000DD; font-weight: bold">5</span>))    <span style="font-size: 150%">⇒</span> (<span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #0000DD; font-weight: bold">0</span> <span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #0000DD; font-weight: bold">4</span>)
+
+<span style="color: #888888">;;; This macro defines a no-arg function called ‘name’. When the said</span>
+<span style="color: #888888">;;; function is called, it prints "Hello ‘name’!".</span>
+(<span style="color: #008800; font-weight: bold">defmacro </span><span style="color: #996633">make-hello-fun</span> 
+  [<span style="color: #996633">name</span>] 
+  <span style="color: #333333">`</span>(<span style="color: #008800; font-weight: bold">defn </span><span style="color: #333333">~</span><span style="color: #007020">name </span>
+     [] 
+     (<span style="color: #0066BB; font-weight: bold">printf</span> <span style="color: #cc00ff">"Hello %s!%n"</span> (<span style="color: #008800; font-weight: bold">quote </span><span style="color: #333333">~</span><span style="color: #996633">name</span>))))
+     
+(<span style="color: #007020">macroexpand-1 </span><span style="color: #333333">'</span>(<span style="color: #0066BB; font-weight: bold">make-hello-fun</span> <span style="color: #996633">world</span>)) 
+<span style="font-size: 150%">⇒</span> (<span style="color: #0066BB; font-weight: bold">clojure.core/defn</span> <span style="color: #996633">world</span> 
+    [] 
+    (<span style="color: #0066BB; font-weight: bold">clojure.core/printf</span> <span style="color: #cc00ff">"Hello %s!%n"</span> (<span style="color: #008800; font-weight: bold">quote </span><span style="color: #996633">world</span>)))     
+     
+(<span style="color: #0066BB; font-weight: bold">make-hello-fun</span> <span style="color: #996633">world</span>)
+(<span style="color: #0066BB; font-weight: bold">make-hello-fun</span> <span style="color: #996633">dude</span>)
+
+(<span style="color: #0066BB; font-weight: bold">world</span>)  <span style="color: #888888">; Prints "Hello world!"</span>
+(<span style="color: #0066BB; font-weight: bold">dude</span>)   <span style="color: #888888">; Prints "Hello dude!"</span>
+</pre>
+
+    </div>        
+
+
+</body></html>

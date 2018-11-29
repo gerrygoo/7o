@@ -41,13 +41,21 @@
     (keep-indexed #(if (not= (mod (inc %1) n) 0) %2 nil) lst)
 )
 
-(defn rotate-left "The function rotate-left takes two arguments: an integer number n and a list lst. It returns the list that results from rotating lst a total of n elements to the left. "
+; (defn rotate-left "The function rotate-left takes two arguments: an integer number n and a list lst. It returns the list that results from rotating lst a total of n elements to the left. "
+;     [n lst]
+;         (cond
+;             (or (empty? lst) (= n 0)) lst
+;             (> n 0) (concat (nthnext lst (mod n (count lst)) ) (take (mod n (count lst)) lst) )
+;             :else (concat (nthnext lst (+ (count lst) (rem n (count lst)) ) ) (take (+ (count lst) (rem n (count lst))) lst) )
+;         )
+; )
+
+(defn rotate-left
     [n lst]
-        (cond
-            (or (empty? lst) (= n 0)) lst
-            (> n 0) (concat (nthnext lst (mod n (count lst)) ) (take (mod n (count lst)) lst) )
-            :else (concat (nthnext lst (- (count lst) (mod (- n) (count lst)) ) ) (take (- (count lst) (mod (- n) (count lst)) ) lst) )
-        )
+    (cond
+        (empty? lst) lst
+        :else (let [n (mod n (count lst))] (->> lst (split-at n) (mapcat reverse) reverse ) )
+    )
 )
 
 (defn gcd "The function gcd takes two positive integer arguments a and b as arguments, where a > 0 and b > 0. It returns the greatest common divisor (GCD) of a and b."

@@ -1,0 +1,22 @@
+#menu {
+    color: #663300;
+    background-color: #EFEFC6;
+    border: 1px solid #BFA873;
+}
+
+#menu_list a:link, #menu a:visited {
+    color: #8A2E2E;
+    text-decoration: none;
+}
+
+#menu_list a:hover {
+    color: white;
+    background-color: black;
+}
+
+.instructions strong {
+    color: #166b95;
+    background-color: #e9f2f6;
+    font-weight: bold;
+    /* font-style: oblique;*/
+}

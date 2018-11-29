@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<!-- saved from url=(0099)http://webcem01.cem.itesm.mx:8005/s201813/tc2006/clojure_collection_api/clojure_collection_api.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        
+    <meta name="author" content="Ariel Ortiz">               
+    <link rel="stylesheet" href="./Clojure Collection API_files/general.css">
+    <link rel="stylesheet" href="./Clojure Collection API_files/code.css">
+    <link rel="stylesheet" href="./Clojure Collection API_files/materia.css">
+    <link rel="stylesheet" href="./Clojure Collection API_files/simple.css">
+    <title>Clojure Collection API</title>    
+</head>
+
+<body>
+    <div id="cuerpo">    
+   
+       
+    <img src="./Clojure Collection API_files/notas.png" alt="" width="128" height="130">
+    
+    <h1>Clojure Collection API</h1>
+        
+    <p>
+        All of the Clojure collections are immutable and persistent. In 
+particular, the Clojure collections support efficient creation of 
+"modified" versions, by utilizing structural sharing, and make all of 
+their performance bound guarantees for persistent use. The collections 
+are efficient and inherently thread-safe. Collections are represented by
+ abstractions, and there may be one or more concrete realizations. In 
+particular, since "modification" operations yield new collections, the 
+new collection might not have the same concrete type as the source 
+collection, but will have the same logical (interface) type.        
+    </p>  
+    
+    <p>
+        All the collections support <code>count</code> for getting the size of the collection and <code>seq</code> to get a sequence that can be used to traverse through all the items in the collection (see the <a href="http://webcem01.cem.itesm.mx:8005/s201713/tc2006/clojure_sequence_api/clojure_sequence_api.html">Clojure Sequence API</a>), though their specific behavior is slightly different for different types of collections.
+    </p>
+    
+    
+            
+    <h2 id="predicates">Collection Predicates</h2>
+    
+    <table>
+        <colgroup><col style="width: 200px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>coll?</strong> <em>x</em>) 
+            </td>
+            <td>
+                Returns <code>true</code> if <em>x</em> is a collection (i.e. it implements the <code>clojure.lang.IPersistentCollection</code> interface), otherwise returns <code>false</code>. 
+            </td>
+            <td class="mono">                   
+                (coll? [1 2 3]) ⇒ true <br>
+                (coll? '(a b c)) ⇒ true <br>
+                (coll? ()) ⇒ true <br>
+                (coll? {:a 1, :b 2}) ⇒ true <br>
+                (coll? #{1 2 3}) ⇒ true <br>
+                (coll? nil) ⇒ false <br>
+                (coll? 42) ⇒ false
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>list?</strong> <em>x</em>) 
+            </td>
+            <td>
+            Returns <code>true</code> if <em>x</em> is a list (i.e. it implements the <code>clojure.lang.IPersistentList</code> interface), otherwise returns <code>false</code>.
+            </td>
+            <td class="mono">                   
+                (list? '(a b c)) ⇒ true <br>
+                (list? ()) ⇒ true <br>
+                (list? [1 2 3]) ⇒ false <br>
+                (list? {:a 1 :b 2}) ⇒ false <br>
+                (list? #{1 2 3}) ⇒ false <br>
+                (list? nil) ⇒ false <br>
+                (list? 42) ⇒ false
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>map?</strong> <em>x</em>) 
+            </td>
+            <td>
+                Returns <code>true</code> if <em>x</em> is a map (i.e. it implements the <code>clojure.lang.IPersistentMap</code> interface), otherwise returns <code>false</code>.
+            </td>
+            <td class="mono">                   
+                (map? '(a b c)) ⇒ false <br>
+                (map? [1 2 3]) ⇒ false <br>
+                (map? {:a 1 :b 2}) ⇒ true <br>
+                (map? {}) ⇒ true <br>
+                (map? #{1 2 3}) ⇒ false <br>
+                (map? nil) ⇒ false <br>
+                (map? 42) ⇒ false
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>set?</strong> <em>x</em>) 
+            </td>
+            <td>
+                Returns <code>true</code> if <em>x</em> is a set (i.e. it implements the <code>clojure.lang.IPersistentSet</code> interface), otherwise returns <code>false</code>.
+            </td>
+            <td class="mono">                   
+            (set? '(a b c)) ⇒ false <br>
+            (set? [1 2 3]) ⇒ false <br>
+            (set? {:a 1 :b 2}) false <br>
+            (set? #{1 2 3}) ⇒ true <br>
+            (set? #{}) ⇒ true <br>
+            (set? nil) ⇒ false <br>
+            (set? 42) ⇒ false                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>vector?</strong> <em>x</em>) 
+            </td>
+            <td>
+                Returns <code>true</code> if <em>x</em> is a vector (i.e. it implements the <code>clojure.lang.IPersistentVector</code> interface), otherwise returns <code>false</code>.
+            </td>
+            <td class="mono">                   
+                (vector? '(a b c)) ⇒ false <br>
+                (vector? [1 2 3]) ⇒ true <br>
+                (vector? []) ⇒ true <br>
+                (vector? {:a 1 :b 2}) ⇒ false <br>
+                (vector? #{1 2 3}) ⇒ false <br>
+                (vector? nil) ⇒ false <br>
+                (vector? 42) ⇒ false                            
+            </td>
+        </tr>
+        
+    </tbody></table>
+
+    
+    <h2 id="lists">Lists</h2>
+    
+    <p>
+        A Clojure list is a sequential collection implemented as a singly-linked list. Lists support directly all the <a href="http://webcem01.cem.itesm.mx:8005/apps/s201611/tc2006/notes_sequences/simple/">sequence functions</a>.     
+    </p>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>conj</strong> <em>lst</em> <em>item</em> &amp; <em>items</em>) <br>
+            </td>
+            <td>
+                Conjoin. Returns a new list with all the <em>items</em> added to the front of <em>lst</em>.
+            </td>
+            <td class="mono">                               
+                (conj '(1 2 3) 4) ⇒ (4 1 2 3) <br>
+                (conj '(1 2 3) 4 5 6) <br>
+                ⇒ (6 5 4 1 2 3) <br>
+                (conj '() 1) ⇒ (1) <br>
+                (conj nil 1) ⇒ (1)                                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>list</strong> &amp; <em>items</em>) 
+            </td>
+            <td>
+                Creates a new list containing <em>items</em>. 
+            </td>
+            <td class="mono">                   
+                (list) ⇒ () <br>
+                (list 1 2 3) ⇒ (1 2 3) <br>
+                (list 1 [2 3] 4) ⇒ (1 [2 3] 4)
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>list*</strong> <em>arg</em> &amp; <em>args</em>) 
+            </td>
+            <td>
+                Similar to <code>list</code>, except that it expects its last argument to be a collection on which to prepend its other arguments (if any). 
+            </td>
+            <td class="mono">                   
+                (list* '(a b c)) ⇒ (a b c) <br>
+                (list* [1 2 3]) ⇒ (1 2 3) <br>
+                (list* 4 5 6 [1 2 3]) <br>
+                ⇒ (4 5 6 1 2 3) <br>
+                (list* 4 5 6 nil) ⇒ (4 5 6) <br>
+                (list* 4 5 6 {:a 1 :b 2}) <br> 
+                ⇒ (4 5 6 [:a 1] [:b 2]) <br>
+                (list* 4 5 6 #{1 2 3}) <br>
+                ⇒ (4 5 6 1 2 3)                
+            </td>
+        </tr>
+    </tbody></table>
+    
+    <h2 id="queues">Queues</h2>
+    
+    <p>
+        A Clojure queue is an efficient FIFO (First-In, First-Out) 
+collection. Clojure doesn’t have a queue reader literal. To create a 
+queue you must use the <code>clojure.lang.PersistentQueue/EMPTY</code> static member.               
+    </p>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>conj</strong> <em>q</em> <em>item</em> &amp; <em>items</em>) <br>
+            </td>
+            <td>
+                Conjoin. Returns a new queue with all the <em>items</em> added to the end of <em>q</em>.
+            </td>
+            <td class="mono"> 
+                (seq <br>
+                &nbsp;&nbsp;(conj <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;clojure.lang.PersistentQueue/EMPTY <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;1 2 3 4))<br>
+                ⇒ (1 2 3 4)
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>peek</strong> <em>q</em>) 
+            </td>
+            <td>
+                Returns the item at the front of <em>q</em>. Returns <code>nil</code> if <em>q</em> is empty. 
+            </td>
+            <td class="mono">                   
+                (peek <br>
+                &nbsp;&nbsp;(conj <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;clojure.lang.PersistentQueue/EMPTY <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;1 2 3 4))<br>
+                ⇒ 1 <br>
+                (peek <br>                
+                &nbsp;&nbsp;clojure.lang.PersistentQueue/EMPTY) <br>
+                ⇒ nil
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>pop</strong> <em>q</em>) 
+            </td>
+            <td>
+                Returns a new queue without the first item of <em>q</em>. Returns <em>q</em> if <em>q</em> is empty. 
+            </td>
+            <td class="mono">                   
+                (seq <br>
+                &nbsp;&nbsp;(pop <br>  
+                &nbsp;&nbsp;&nbsp;&nbsp;(conj <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clojure.lang.PersistentQueue/EMPTY <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 2 3 4)))<br>
+                ⇒ (2 3 4)                
+            </td>
+        </tr>
+    </tbody></table>
+    
+    <h2 id="vectors">Vectors</h2>
+    
+    <p>
+        A vector is a collection of values indexed by contiguous integers. They are similar to arrays in other languages. 
+    </p>
+    
+    <p>
+        Vectors can be used as functions (i.e. they implement the <code>clojure.lang.IFn</code> interface). If <em>v</em> is a vector, then: 
+    </p>
+    
+    <p class="indenta">
+        <span class="mono">(<em>v</em> <em>index</em>)</span> ≡ <span class="mono">(nth <em>v</em> <em>index</em>)</span>
+    </p>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>assoc</strong> <em>v</em> <em>index</em> <em>val</em>) <br>
+               (<strong>assoc</strong> <em>v</em> <br>
+               &nbsp;&nbsp;<em>index</em> <em>val</em> &amp; <em>ivs</em>) 
+            </td>
+            <td>
+                Associate. Returns a new vector based on <em>v</em> but containing <em>val</em> at <em>index</em>. <em>index</em> must be less or equal to the total amount of items in <em>v</em>, otherwise throws an index out of bounds exception. 
+            </td>
+            <td class="mono">                   
+                (assoc '[a b c] 0 'x) ⇒ [x b c] <br>
+                (assoc '[a b c] 3 'x) ⇒ [a b c x] <br>                
+                (assoc '[a b c] 0 'x 3 'y 4 'z) <br>
+                ⇒ [x b c y z] <br>
+                (assoc [] 0 'x) ⇒ [x]                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>conj</strong> <em>v</em> <em>item</em> &amp; <em>items</em>) <br>
+            </td>
+            <td>
+                Conjoin. Returns a new vector with all the <em>items</em> added at the end of <em>v</em>.
+            </td>
+            <td class="mono">                   
+                (conj [1 2 3] 4) ⇒ [1 2 3 4] <br>
+                (conj [1 2 3] 4 5 6) <br>
+                ⇒ [1 2 3 4 5 6] <br>
+                (conj [] 1) ⇒ [1]                                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>get</strong> <em>v</em> <em>index</em>) <br>
+               (<strong>get</strong> <em>v</em> <em>index</em> <br> &nbsp;&nbsp;<em>not-found</em>) 
+            </td>
+            <td>
+                Returns the value of <em>v</em> at <em>index</em>. Returns <em>not-found</em> if <em>index</em> is out of bounds, or  <code>nil</code> if not provided. Similar to <code>nth</code>, except that it doesn't throw an exception when <em>index</em> is out of bounds.                  
+            </td>
+            <td class="mono">                   
+                (get '[a b c] 0) ⇒ a <br>
+                (get '[a b c] 2) ⇒ c <br>
+                (get '[a b c] 3) ⇒ nil <br>
+                (get '[a b c] 3 'oops) ⇒ oops <br>
+                (get '[a b c] -1) ⇒ nil                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>nth</strong> <em>v</em> <em>index</em>) <br>
+               (<strong>nth</strong> <em>v</em> <em>index</em> <em>not-found</em>)
+            </td>
+            <td>
+                Returns the value in <em>v</em> at the zero-based <em>index</em>. If <em>index</em> is out of bounds, throws an exception unless <em>not-found</em> is supplied.             
+            </td>
+            <td class="mono">                
+                (nth '[a b c d] 0) ⇒ a <br>
+                (nth '[a b c d] 3) ⇒ d <br>
+                (nth '[a b c d] 4 'oops) ⇒ oops                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>peek</strong> <em>v</em>) 
+            </td>
+            <td>
+                Returns the last element of <em>v</em>. Returns <code>nil</code> if <em>v</em> is empty.                 
+            </td>
+            <td class="mono">                
+                (peek [3 2 1])) ⇒ 1 <br>                
+                (peek []) ⇒ nil                                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>pop</strong> <em>v</em>) 
+            </td>
+            <td>
+                 Returns a new vector without the last item of <em>v</em>. Throws an exception when <em>v</em> is empty.                                  
+            </td>
+            <td class="mono">                
+                (pop [3 2 1]) ⇒ [3 2] <br>
+                (pop [3]) ⇒ []
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>subvec</strong> <em>v</em> <em>start</em>) <br>
+               (<strong>subvec</strong> <em>v</em> <em>start</em> <em>end</em>)
+            </td>
+            <td>
+                Returns a new vector containing the items in <em>v</em> from <em>start</em> (inclusive) to <em>end</em> (exclusive).  If <em>end</em> is not supplied, defaults to the size of <em>v</em>.             
+            </td>
+            <td class="mono">
+                (subvec '[a b c d] 1) ⇒ [b c d] <br>
+                (subvec '[a b c d] 1 3) ⇒ [b c] <br>                
+                (subvec '[a b c d] 0 2) ⇒ [a b]                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>vec</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Creates a new vector containing the contents of <em>coll</em>. 
+            </td>
+            <td class="mono">                   
+                (vec '(a b c)) ⇒ [a b c] <br>
+                (vec [1 2 3]) ⇒ [1 2 3] <br>
+                (vec {:a 1 :b 2}) <br>
+                ⇒ [[:a 1] [:b 2]] <br>
+                (vec #{1 2 3}) ⇒ [1 2 3] <br>
+                (vec nil) ⇒ []                 
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>vector</strong> &amp; <em>args</em>) 
+            </td>
+            <td>
+                Creates a new vector containing all the <em>args</em>. 
+            </td>
+            <td class="mono">                   
+                (vector 1 2 3) ⇒ [1 2 3] <br>
+                (vector) ⇒ [] <br>
+                (vector nil) ⇒ [nil]                
+            </td>
+        </tr>
+                
+    </tbody></table>
+    
+    <h2 id="maps">Maps</h2>
+    
+    <p>
+        A map is a collection that maps keys to values. Two different 
+map types are provided — hashed and sorted. Hash maps require keys that 
+are correctly supported by the <code>hash</code> and <code>=</code> functions. Sorted maps require keys that are supported by the <code>compare</code> function. <code>seq</code> applied to a map returns a sequence of map entries, which are key/value pairs. 
+    </p>        
+    
+    <p>
+        Maps can be used as functions (i.e. they implement the <code>clojure.lang.IFn</code> interface). If <em>m</em> is a map, then:
+    </p>
+        
+    <p class="indenta">
+        <span class="mono">(<em>m</em> <em>key</em>)</span> ≡ <span class="mono">(get <em>m</em> <em>key</em>)</span>
+    </p>
+    
+    <p class="indenta">
+        <span class="mono">(<em>m</em> <em>key</em> <em>not-found</em>)</span> ≡ <span class="mono">(get <em>m</em> <em>key</em> <em>not-found</em>)</span>
+    </p>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>assoc</strong> <em>m</em> <em>key</em> <em>val</em>) <br>
+               (<strong>assoc</strong> <em>m</em> <br>
+               &nbsp;&nbsp;<em>key</em> <em>val</em> &amp; <em>kvs</em>) 
+            </td>
+            <td>
+                Associate. Returns a new map with the same elements and of the same type (hashed/sorted) as <em>m</em>, but containing the <em>key</em>/<em>val</em> mappings. 
+            </td>
+            <td class="mono">                   
+                (assoc {:a 1 :b 2} :a 0) <br>
+                ⇒ {:a 0, :b 2} <br>
+                (assoc {:a 1 :b 2} :c 0) <br>
+                ⇒ {:c 0, :a 1, :b 2} <br>
+                (assoc {:a 1 :b 2} :c 3 :a 4) <br>
+                ⇒ {:c 3, :a 4, :b 2} <br>
+                (assoc {} :a 1) ⇒ {:a 1}                
+            </td>
+        </tr>
+        <tr>
+            <td class="mono">               
+               (<strong>conj</strong> <em>m</em> <em>item</em> &amp; <em>items</em>) <br>
+            </td>
+            <td>
+                Conjoin. Returns a new map with all the <em>items</em> added to <em>m</em>. It expects one or more maps as the <em>items</em>,
+ and returns a new map which is the old map plus the entries from the 
+new ones, which may overwrite entries of the old. It also accepts 
+vectors of two items (key and value). The exact place where the <em>items</em> are added depends on the concrete type of <em>m</em> (hashed or sorted).
+            </td>
+            <td class="mono">
+                (conj {:a 1 :b 2 :c 3} {:d 4}) <br>
+                ⇒ {:d 4, :a 1, :b 2, :c 3} <br>            
+                (conj {:a 1 :b 2 :c 3} {:d 4} <br> 
+                &nbsp;&nbsp;{:e 5} {:a 10 :f 6}) <br>
+                ⇒ {:f 6, :e 5, :d 4, :a 10, <br>
+                &nbsp;&nbsp;:b 2, :c 3} <br>
+                (conj {:a 1 :b 2 :c 3} [:d 4] <br>
+                &nbsp;&nbsp;[:e 5]) <br>
+                ⇒ {:e 5, :d 4, :a 1, :b 2, :c 3}                        
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>contains?</strong> <em>m</em> <em>key</em>)  
+            </td>
+            <td>
+                Returns <code>true</code> if <em>key</em> is present in <em>m</em>, otherwise returns <code>false</code>. 
+            </td>
+            <td class="mono">                   
+                (contains? {:a 1 :b 2 :c 3} :b) <br>
+                ⇒ true <br>
+                (contains? {:a 1 :b 2 :c 3} :d) <br>
+                ⇒ false <br>
+                (contains? {} :a) ⇒ false                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>dissoc</strong> <em>m</em> <em>key</em>) <br>
+               (<strong>dissoc</strong> <em>m</em> <em>key</em> &amp; <em>keys</em>) 
+            </td>
+            <td>                
+                Dissociate. Returns a new map of the same type (hashed/sorted) as <em>m</em>, but not containing the mappings for <em>keys</em>.
+            </td>
+            <td class="mono">                   
+                (dissoc {:a 1 :b 2} :a) <br>
+                ⇒ {:b 2} <br>
+                (dissoc {:a 1 :b 2} :a :b) <br>
+                ⇒ {} <br>
+                (dissoc {:a 1 :b 2} :c) <br>
+                ⇒ {:a 1, :b 2} <br>
+                (dissoc {} :a) ⇒ {}                                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>frequencies</strong> <em>coll</em>)
+            </td>
+            <td>
+                Returns a map from distinct items in <em>coll</em> mapped to the number of times they appear.                
+            </td>
+            <td class="mono">                   
+                (frequencies [:a :b :a :c :b :a]) <br>
+                ⇒ {:a 3, :b 2, :c 1} <br>
+                (frequencies []) ⇒ {}                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>get</strong> <em>m</em> <em>key</em>) <br>
+               (<strong>get</strong> <em>m</em> <em>key</em> <em>not-found</em>)
+            </td>
+            <td>
+                Returns the value contained in <em>m</em> mapped to <em>key</em>. Returns <code>nil</code> or <em>not-found</em> if <em>key</em> is not present.                
+            </td>
+            <td class="mono">                   
+                (get {:a 1 :b 2} :a) ⇒ 1 <br>
+                (get {:a 1 :b 2} :c) ⇒ nil <br>
+                (get {:a 1 :b 2} :c 'oops) ⇒ oops                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>hash-map</strong> &amp; <em>keyvals</em>)                
+            </td>
+            <td>
+                Returns a new hash map with the supplied mappings in <em>keyvals</em>.
+            </td>
+            <td class="mono">
+                (hash-map) ⇒ {} <br>
+                (hash-map :x 1 :y 2 :z 3 :w 4) <br>
+                ⇒ {:z 3, :y 2, :x 1, :w 4}                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>keys</strong> <em>m</em>)                
+            </td>
+            <td>
+                Returns a sequence of the keys contained in <em>m</em>. Returns <code>nil</code> if <em>m</em> is empty.
+            </td>
+            <td class="mono">
+                (keys {:a 1 :b 2 :c 3}) ⇒ (:a :b :c) <br>
+                (keys {}) ⇒ nil                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>merge</strong> &amp; <em>ms</em>)                
+            </td>
+            <td>
+                Returns a new map that consists of the rest of <em>ms</em>
+ conjoined into the first. If a key occurs in more than one map, the 
+mapping from the latter (left-to-right) will be the mapping in the 
+result.
+            </td>
+            <td class="mono">
+                (merge {:a 1 :b 2} {:c 3 :d 4}) <br>
+                ⇒ {:d 4, :c 3, :a 1, :b 2} <br>
+                (merge {:a 1 :b 2} {:a 3 :d 4} <br>
+                &nbsp;&nbsp;{:a 5 :e 6}) <br>
+                ⇒ {:e 6, :d 4, :a 5, :b 2}                                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>select-keys</strong> <em>m</em> <em>keyseq</em>)                
+            </td>
+            <td>
+                Returns a new map containing only those entries in <em>m</em> whose keys are in <em>keyseq</em>.
+            </td>
+            <td class="mono">
+                (select-keys {:a 1 :b 2 :c 3} <br>
+                &nbsp;&nbsp;[:a :c]) <br> 
+                ⇒ {:c 3, :a 1} <br>
+                (select-keys {:a 1 :b 2 :c 3} <br>
+                &nbsp;&nbsp;[:d :e]) <br>
+                ⇒ {} <br>
+                (select-keys {} [:a]) ⇒ {}                                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>sorted-map</strong> &amp; <em>keyvals</em>)                
+            </td>
+            <td>
+                Returns a new sorted map with the supplied mappings in <em>keyvals</em>.
+            </td>
+            <td class="mono">
+                (sorted-map) ⇒ {} <br>
+                (sorted-map :x 1 :y 2 :z 3 :w 4) <br>
+                ⇒ {:w 4, :x 1, :y 2, :z 3}                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>vals</strong> <em>m</em>)                
+            </td>
+            <td>
+                Returns a sequence of the values contained in <em>m</em>. Returns <code>nil</code> if <em>m</em> is empty.
+            </td>
+            <td class="mono">
+                (vals {:a 1 :b 2 :c 3}) ⇒ (1 2 3) <br>
+                (vals {}) ⇒ nil                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>zipmap</strong> <em>keys</em> <em>vals</em>)                
+            </td>
+            <td>
+                Returns a new map with the <em>keys</em> mapped by position to the corresponding <em>vals</em>.
+            </td>
+            <td class="mono">
+                (zipmap [:a :b :c] [1 2 3]) <br>
+                ⇒ {:c 3, :b 2, :a 1} <br>
+                (zipmap [:a :b :c] [1 2 3 4 5]) <br>
+                ⇒ {:c 3, :b 2, :a 1} <br>
+                (zipmap [] [1 2 3 4 5]) ⇒ {}                                
+            </td>
+        </tr>
+    </tbody></table>        
+    
+       
+    <h2 id="sets">Sets</h2>
+    
+    <p>
+        Sets are collections of unique values without any regard to 
+their order. Two different set types are provided — hashed and sorted. 
+Hash sets require keys that are correctly supported by the <code>hash</code> and <code>=</code> functions. Sorted sets require keys that are supported by the <code>compare</code> function.
+    </p>
+    
+    <p>
+        Sets can be used as functions (i.e. they implement the <code>clojure.lang.IFn</code> interface). If <em>s</em> is a set, then:
+    </p>
+        
+    <p class="indenta">
+        <span class="mono">(<em>s</em> <em>key</em>)</span> ≡ <span class="mono">(get <em>s</em> <em>key</em>)</span>
+    </p>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>conj</strong> <em>s</em> <em>item</em> &amp; <em>items</em>) <br>
+            </td>
+            <td>
+                Conjoin. Returns a new set with all the <em>items</em> added to <em>s</em>. The exact place where the <em>items</em> are added depends on the concrete type of <em>s</em> (hashed or sorted). 
+            </td>
+            <td class="mono">                   
+                (conj #{:a :b :c} :d) <br>
+                ⇒ #{:a :c :b :d} <br>
+                (conj #{:a :b :c} :d :e :f) <br>
+                ⇒ #{:a :c :b :f :d :e} <br>
+                (conj #{} :a) ⇒ #{:a}                                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>contains?</strong> <em>s</em> <em>key</em>)  
+            </td>
+            <td>
+                Returns <code>true</code> if <em>key</em> is present in <em>s</em>, otherwise returns <code>false</code>. 
+            </td>
+            <td class="mono">
+                (contains? #{:a :b :c :d} :b) <br>
+                ⇒ true <br>
+                (contains? #{:a :b :c :d} :e) <br>
+                ⇒ false <br>
+                (contains? #{} :a) ⇒  false            
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>disj</strong> <em>s</em>) <br>
+               (<strong>disj</strong> <em>s</em> <em>key</em> &amp; <em>keys</em>) <br>
+            </td>
+            <td>                
+                Disjoin. Returns a new set of the same type (hashed/sorted) as <em>s</em>, but not containing <em>keys</em>.               
+            </td>
+            <td class="mono">                   
+                (disj #{:a :b :c :d} :b) <br>
+                ⇒  #{:a :c :d} <br>
+                (disj #{:a :b :c :d}) <br>
+                ⇒  #{:a :c :b :d} <br>                
+                (disj #{:a :b :c :d} :e) <br>
+                ⇒ #{:a :c :b :d} <br>
+                (disj #{:a :b :c :d} :a :c :d :e) <br>
+                ⇒ #{:b} <br>
+                (disj #{} :a) ⇒ #{} <br>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>get</strong> <em>s</em> <em>key</em>) <br>
+               (<strong>get</strong> <em>s</em> <em>key</em> <em>not-found</em>) </td>
+            <td>
+                Returns <em>key</em> if it's contained in <em>s</em>. Returns <code>nil</code> or <em>not-found</em> if <em>key</em> is not present.                
+            </td>
+            <td class="mono">                   
+                (get #{:a :b :c} :b) ⇒ :b <br>
+                (get #{:a :b :c} :d) ⇒ nil <br>
+                (get #{:a :b :c} :d, 'oops) ⇒ oops                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>hash-set</strong> &amp; <em>keys</em>)                
+            </td>
+            <td>
+                Returns a new hash set with the supplied <em>keys</em>.                
+            </td>
+            <td class="mono">
+                (hash-set) ⇒ #{} <br>
+                (hash-set :x :y :z :w) <br>
+                ⇒ #{:z :y :x :w}                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>set</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns a set of the distinct elements contained in <em>coll</em>.                 
+            </td>
+            <td class="mono">                   
+                (set [1 3 4 1 2 5 1 4]) <br>
+                ⇒ #{1 2 3 4 5} <br>
+                (set {:a 1 :b 2 :c 3}) <br>
+                ⇒ #{[:b 2] [:c 3] [:a 1]} <br>
+                (set []) ⇒ #{}
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>sorted-set</strong> &amp; <em>keys</em>)                
+            </td>
+            <td>
+                Returns a new sorted set with the supplied <em>keys</em>.
+            </td>
+            <td class="mono">
+                (sorted-set) ⇒ #{} <br>
+                (sorted-set :x :y :z :w) <br>
+                ⇒ #{:w :x :y :z}                
+            </td>
+        </tr>
+    </tbody></table>
+    
+    <p>
+        To use the set functions from the following table, first you need to load and correctly refer to the <code>clojure.set</code> namespace. For example:
+    </p>
+    
+    <div class="mono indenta">
+    	(use 'clojure.set)
+    </div>          
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>difference</strong> <em>s</em> &amp; <em>sets</em>)  
+            </td>
+            <td>
+                Returns a new set that is <em>s</em> without the elements of the remaining <em>sets</em>.                
+            </td>
+            <td class="mono">
+                (difference #{:a :b :c} #{:a :c}) <br>
+                ⇒ #{:b} <br>
+                (difference #{:a :b :c} <br>
+                &nbsp;&nbsp;#{:a :c :d}) <br>
+                ⇒ #{:b} <br>
+                (difference #{:a :b :c} #{:a} <br>
+                &nbsp;&nbsp;#{:c :d} #{:e :f}) <br> 
+                ⇒ #{:b} <br>
+                (difference #{} #{:a :b :c}) ⇒ #{}            
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>intersection</strong> <em>s</em> &amp; <em>sets</em>)  
+            </td>
+            <td>
+                Returns a new set that is the intersection of the input <em>sets</em>.
+            </td>
+            <td class="mono">
+                (intersection #{:a :b :c} <br>
+                &nbsp;&nbsp;#{:b :d :e}) <br>
+                ⇒ #{:b} <br>
+                (intersection #{:a :b :c} <br>
+                &nbsp;&nbsp;#{:b :c :d} #{:c :e}) <br>
+                ⇒ #{:c} <br>
+                (intersection #{:a :b :c} <br>
+                &nbsp;&nbsp;#{:d :e} #{:f}) <br>                
+                ⇒ #{} <br>
+                (intersection #{:a :b}) ⇒ #{:a :b}            
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>subset?</strong> <em>s1</em> <em>s2</em>)  
+            </td>
+            <td>
+                Returns <code>true</code> if <em>s1</em> is a subset of <em>s2</em>, otherwise returns <code>false</code>.
+            </td>
+            <td class="mono">
+                (subset? #{:b :c} #{:a :b :c :d}) <br>
+                ⇒ true <br>
+                (subset? #{} #{:a :b :c :d}) <br>
+                ⇒ true <br>
+                (subset? #{:a :b} #{:b :a}) ⇒ true <br>
+                (subset? #{:a :b :c :d} #{:a :b}) <br>
+                ⇒ false                            
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>superset?</strong> <em>s1</em> <em>s2</em>)  
+            </td>
+            <td>
+                Returns <code>true</code> if <em>s1</em> is a superset of <em>s2</em>, otherwise returns <code>false</code>.
+            </td>
+            <td class="mono">
+                (superset? #{:a :b :c :d} <br>
+                &nbsp;&nbsp;#{:b :c}) <br>
+                ⇒ true <br>
+                (superset? #{:a :b :c :d} #{}) <br>
+                ⇒ true <br>
+                (superset? #{:a :b} #{:b :a}) <br>
+                ⇒ true <br>
+                (superset? #{:a :b} #{:a :b :c :d}) <br>
+                ⇒ false                            
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>union</strong> &amp; <em>sets</em>)  
+            </td>
+            <td>
+                Returns a new set that is the union of all the input <em>sets</em>.
+            </td>
+            <td class="mono">
+                (union #{:a :b} #{:a :c}) <br>
+                ⇒ #{:a :c :b} <br>
+                (union #{:a} #{:b :c} #{:c :d :e}) <br>
+                ⇒ #{:a :c :b :d :e} <br>
+                (union) ⇒ #{}            
+            </td>
+        </tr>
+    </tbody></table>
+    
+    <h2 id="performance">Collection Performance Guarantees</h2>
+    
+    <p>
+        As published in
+        <a href="http://www.innoq.com/blog/st/2010/04/clojure_performance_guarantees.html">
+        Clojure Performance Guarantees</a>.
+    </p>
+    
+    <table>
+        <colgroup><col style="width: 4%">
+        <col style="width: 12%">
+        <col style="width: 12%">
+        <col style="width: 12%">
+        <col style="width: 12%">
+        <col style="width: 12%">
+        <col style="width: 12%">
+        <col style="width: 12%">
+        <col style="width: 12%">        
+        </colgroup><tbody><tr>
+            <th></th>
+            <th>
+                Lazy Seq
+            </th>
+            <th>
+                List
+            </th>
+            <th>
+                Queue
+            </th>
+            <th>
+                Vector
+            </th>            
+            <th>
+                Hash Map
+            </th>
+            <th>
+                Sorted Map
+            </th>
+            <th>
+                Hash Set
+            </th>
+            <th>
+                Sorted Set
+            </th>
+        </tr>
+        
+        <tr>
+            <th class="mono">
+                assoc
+            </th>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>2</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+        </tr>
+        
+        <tr>
+            <th class="mono">
+                conj
+            </th>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>2</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>2</sub> <em>n</em>)
+            </td>
+        </tr> 
+        
+        <tr>
+            <th class="mono">
+                count
+            </th>
+            <td class="centro">
+                <em>O</em>(<em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(1) 
+            </td>
+            <td class="centro">
+                <em>O</em>(1) 
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)                
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+        </tr>
+        
+        <tr>
+            <th class="mono">
+                disj
+            </th>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>2</sub> <em>n</em>)
+            </td>
+        </tr>
+
+        <tr>
+            <th class="mono">
+                dissoc
+            </th>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>2</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                — 
+            </td>
+            <td class="centro">
+                —
+            </td>
+        </tr>     
+        
+        <tr>
+            <th class="mono">
+                get
+            </th>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>2</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>2</sub> <em>n</em>)
+            </td>
+        </tr>
+
+        <tr>
+            <th class="mono">
+                nth
+            </th>
+            <td class="centro">
+                <em>O</em>(<em>n</em>)  
+            </td>
+            <td class="centro">
+                <em>O</em>(<em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(<em>n</em>)
+            </td>
+            <td class="centro">
+                <em>O</em>(log<sub>32</sub> <em>n</em>) 
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+        </tr>                     
+        
+        <tr>
+            <th class="mono">
+                peek
+            </th>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+        </tr>
+        
+        <tr>
+            <th class="mono">
+                pop
+            </th>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                <em>O</em>(1)
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+            <td class="centro">
+                —
+            </td>
+        </tr>  
+                                            
+    </tbody></table>
+    
+
+    
+    </div>
+    
+</body></html>

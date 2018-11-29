@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<!-- saved from url=(0095)http://webcem01.cem.itesm.mx:8005/s201813/tc2006/clojure_sequence_api/clojure_sequence_api.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        
+    <meta name="author" content="Ariel Ortiz">               
+    <link title="Curso de ArielOrtiz.info" rel="stylesheet" href="./Clojure Sequence API_files/general.css">
+    <link rel="stylesheet" href="./Clojure Sequence API_files/code.css">
+    <link rel="stylesheet" href="./Clojure Sequence API_files/materia.css">
+    <link rel="stylesheet" href="./Clojure Sequence API_files/simple.css">
+    <title>Clojure Sequence API</title>    
+</head>
+
+<body>
+
+    <div id="cuerpo">    
+
+    <img src="./Clojure Sequence API_files/notas.png" alt="" width="128" height="130">       
+    
+    <h1>Clojure Sequence API</h1>       
+
+    <p>
+        A Clojure <em>sequence</em> (or <em>seq</em>, pronounced "seek")
+ is a sequential collection that represents a series of values that may 
+or may not exist yet. They may be values from a concrete collection or 
+values that are computed as necessary. A sequence may also be empty.    
+    
+    </p>  
+    
+    
+    
+    <h2 id="basic">Basic Sequence Operations</h2>
+    
+    <table>
+        <colgroup><col style="width: 200px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>count</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns the number of items in <em>coll</em>. Returns 0 when <em>coll</em> is <code>nil</code>. 
+            </td>
+            <td class="mono">                   
+                (count [10 5 1]) ⇒ 3 <br>
+                (count ()) ⇒ 0 <br>                
+                (count nil) ⇒ 0                       
+            </td>
+        </tr>
+                        
+        <tr>
+            <td class="mono">
+               (<strong>seq</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Some collections, such as lists, implement the seq API directly, so calling <code>seq</code> on them returns the collection itself. More often however, calling <code>seq</code> on a collection returns a new seq object for navigating that collection. Returns <code>nil</code> if <em>coll</em> is empty or <code>nil</code>.
+            </td>
+            <td class="mono">                
+                (seq '(3 2 1)) ⇒ (3 2 1) <br>
+                (seq [3 2 1]) ⇒ (3 2 1) <br>
+                (seq "hello") ⇒ (\h \e \l \l \o) <br>
+                (seq []) ⇒ nil <br>
+                (seq nil) ⇒ nil                       
+            </td>
+        </tr>                                            
+          
+    </tbody></table>
+
+    
+    <h2 id="navigation">Sequence Navigation</h2>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>butlast</strong> <em>coll</em>) 
+            </td>
+            <td>            
+                Returns a sequence with the same items as <em>coll</em> except the last one. Calls <code>seq</code> on its argument. Returns an empty sequence if <em>coll</em> is empty or <code>nil</code>.                 
+            </td>
+            <td class="mono">                
+                (butlast [3 2 1]) ⇒ (3 2) <br>
+                (butlast "hello") ⇒ (\h \e \l \l) <br>
+                (butlast [1]) ⇒ nil <br>
+                (butlast []) ⇒ nil <br>
+                (butlast nil) ⇒ nil                       
+            </td>
+        </tr>
+                                    
+        <tr>
+            <td class="mono">
+               (<strong>first</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns the first item in <em>coll</em>. Calls <code>seq</code> on its argument. Returns <code>nil</code> if <em>coll</em> is empty or <code>nil</code>.
+            </td>
+            <td class="mono">                
+                (first [3 2 1]) ⇒ 3 <br>
+                (first "hello") ⇒ \h <br>
+                (first []) ⇒ nil <br>
+                (first nil) ⇒ nil                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>last</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns the last item in <em>coll</em>. Calls <code>seq</code> on its argument. Returns <code>nil</code> if <em>coll</em> is empty or <code>nil</code>.
+            </td>
+            <td class="mono">                
+                (last [3 2 1]) ⇒ 1 <br>
+                (last "hello") ⇒ \o <br>
+                (last []) ⇒ nil <br>
+                (last nil) ⇒ nil                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>next</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Equivalent to: <span class="mono">(seq (rest <em>coll</em>))</span>                 
+            </td>
+            <td class="mono">                
+                (next [3 2 1]) ⇒ (2 1) <br>
+                (next "hello") ⇒ (\e \l \l \o) <br>
+                (next [1]) ⇒ nil <br>
+                (next []) ⇒ nil <br>
+                (next nil) ⇒ nil                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>nth</strong> <em>coll</em> <em>index</em>) <br>
+               (<strong>nth</strong> <em>coll</em> <em>index</em> <br> &nbsp;&nbsp;<em>not-found</em>) <br>
+            </td>
+            <td>
+                Returns the value in <em>coll</em> at the zero-based <em>index</em>. If <em>index</em> is out of bounds, throws an exception unless <em>not-found</em> is supplied.             
+            </td>
+            <td class="mono">                
+                (nth '(a b c d) 0) ⇒ a <br>
+                (nth '(a b c d) 3) ⇒ d <br>
+                (nth '(a b c d) 4 'oops) ⇒ oops                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>peek</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Same as <code>first</code> when applied to a sequence.                 
+            </td>
+            <td class="mono">                
+                (peek '(3 2 1)) ⇒ 3 <br>                
+                (peek ()) ⇒ nil <br>
+                (peek nil) ⇒ nil                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>pop</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Similar to <code>rest</code>, but throws an exception when <em>coll</em> is empty. Returns <code>nil</code> if <em>coll</em> is <em>nil</em>.                                 
+            </td>
+            <td class="mono">                
+                (pop '(3 2 1)) ⇒ (2 1) <br>
+                (pop nil) ⇒ nil
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>rest</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns a sequence with the same items as <em>coll</em> except the first one. Calls <code>seq</code> on its argument. Returns an empty sequence if <em>coll</em> is empty or <code>nil</code>.                 
+            </td>
+            <td class="mono">                
+                (rest [3 2 1]) ⇒ (2 1) <br>
+                (rest "hello") ⇒ (\e \l \l \o) <br>
+                (rest [1]) ⇒ () <br>
+                (rest []) ⇒ () <br>
+                (rest nil) ⇒ ()                       
+            </td>
+        </tr>                
+                        
+    </tbody></table>
+    
+    <h2 id="predicates">Sequence Predicates</h2>
+    
+    <table>
+        <colgroup><col style="width: 200px">
+        <col>
+        <col style="width: 350px">
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+                        
+        <tr>
+            <td class="mono">
+               (<strong>empty?</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns <code>true</code> if <em>coll</em> has no items, otherwise returns <code>false</code>. It is equivalent to: <span class="mono">(not (seq <em>coll</em>))</span>. Use the idiom <span class="mono">(seq <em>x</em>)</span> rather than <span class="mono">(not (empty? <em>x</em>))</span>. 
+            </td>
+            <td class="mono">
+                (empty? ()) ⇒ true <br>
+                (empty? '(a b c)) ⇒ false <br>                                
+                (empty? nil) ⇒ true                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>every?</strong> <em>pred</em> <em>coll</em>) 
+            </td>
+            <td>
+                Returns <code>true</code> if <span class="mono">(<em>pred</em> <em>x</em>)</span> is true for every <em>x</em> in <em>coll</em>, otherwise returns <code>false</code>. 
+            </td>
+            <td class="mono">
+                (every? even? [4 6 10 8 2]) <br>
+                ⇒ true <br>
+                (every? even? [4 6 5 10 8 2]) <br>
+                ⇒ false <br>
+                (every? even? []) ⇒ true                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>seq?</strong> <em>x</em>) 
+            </td>
+            <td>
+                Returns <code>true</code> if <em>x</em> is a sequence (i.e. it implements the <code>clojure.lang.ISeq</code> interface), otherwise returns <code>false</code>.
+            </td>
+            <td class="mono">                
+                (seq? '(3 2 1)) ⇒ true <br>
+                (seq? [3 2 1]) ⇒ false <br>
+                (seq? "hello") ⇒ false <br>
+                (seq? ()) ⇒ true <br>
+                (seq? nil) ⇒ false <br>
+                (seq? 42) ⇒ false
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>some</strong> <em>pred</em> <em>coll</em>) 
+            </td>
+            <td>
+                Returns the first logical true value of <span class="mono">(pred <em>x</em>)</span> for any <em>x</em> in <em>coll</em>, otherwise returns <code>nil</code>.
+            </td>
+            <td class="mono">                
+                (some even? [4 6 10 8 2]) ⇒ true <br>
+                (some odd? [4 6 5 10 8 2]) ⇒ true <br>
+                (some first '([] () (a b c) [])) <br>
+                ⇒ a <br>
+                (some first '([] () [])) ⇒ nil <br>
+            </td>
+        </tr>
+          
+    </tbody></table>
+    
+    <h2 id="creating">Creating Sequences</h2>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>concat</strong> &amp; <em>colls</em>) 
+            </td>
+            <td>
+                Returns a lazy sequence representing the concatenation of the elements in the supplied <em>colls</em>.                
+            </td>
+            <td class="mono">                
+                (concat [1 2 3] '(a b c)) <br>
+                ⇒ (1 2 3 a b c) <br>                
+                (concat [1 2] [3 4 5] [6]) <br>
+                ⇒ (1 2 3 4 5 6) <br>       
+                (concat) ⇒ ()                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>cons</strong> <em>x</em> <em>coll</em>) 
+            </td>
+            <td>
+                Returns a new sequence where <em>x</em> is the first element and <em>coll</em> is the rest. Calls <code>seq</code> on its argument.                
+            </td>
+            <td class="mono">                
+                (cons 4 [3 2 1]) ⇒ (4 3 2 1) <br>
+                (cons \h "ello") <br>
+                ⇒ (\h \e \l \l \o) <br>
+                (cons 1 []) ⇒ (1) <br>
+                (cons 1 nil) ⇒ (1)                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>cycle</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns an infinite lazy sequence of repetitions of all the items in <em>coll</em>. Returns an empty sequence if <em>coll</em> is empty.                
+            </td>
+            <td class="mono">                
+                (take 6 (cycle [1 2])) <br>
+                ⇒ (1 2 1 2 1 2) <br>
+                (take 10 (cycle '(a b c d))) <br>
+                ⇒ (a b c d a b c d a b) <br>
+                (cycle ()) ⇒ ()                       
+            </td>
+        </tr>
+                
+        <tr>
+            <td class="mono">               
+               (<strong>interleave</strong> <br>
+               &nbsp;&nbsp;<em>coll1</em> <em>coll2</em> &amp; <em>colls</em>) 
+            </td>
+            <td>
+                Returns a lazy sequence composed of the first item in each <em>coll</em>, then the second item, and so on. It stops when any of the collections is exhausted.               
+            </td>
+            <td class="mono">                
+                (interleave [1 2 3] '(a b c)) <br>
+                ⇒ (1 a 2 b 3 c) <br>
+                (interleave '(a b c) [1 2 3 4]) <br>
+                ⇒ (a 1 b 2 c 3) <br>
+                (interleave <br> 
+                &nbsp;&nbsp;(range 5) "hello" <br>
+                &nbsp;&nbsp;'(a b c d e f)) <br>
+                ⇒ (0 \h a 1 \e b 2 \l c 3 \l d 4 <br>
+                &nbsp;&nbsp;\o e) <br>
+                (interleave [] [1 2 3]) ⇒ ()                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>interpose</strong> <em>sep</em> <em>coll</em>)               
+            </td>
+            <td>
+                Returns a lazy sequence of the elements of <em>coll</em> separated by <em>sep</em>.               
+            </td>
+            <td class="mono">                
+                ((interpose 'a [1 2 3 4]) <br>
+                ⇒ (1 a 2 a 3 a 4) <br>
+                (interpose 'a []) ⇒ ()                       
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>iterate</strong> <em>f</em> <em>x</em>) 
+            </td>
+            <td>
+                Returns an infinite lazy sequence composed of <span class="mono"><em>x</em></span>, <span class="mono">(<em>f</em> <em>x</em>)</span>, <span class="mono">(<em>f</em> (<em>f</em> <em>x</em>))</span>, and so on. <em>f</em> must be free of side-effects.                
+            </td>
+            <td class="mono">                
+                (take 8 (iterate #(* % 2) 1)) <br>
+                ⇒ (1 2 4 8 16 32 64 128) <br>
+                (take 5 (iterate #(conj % 'a) [])) <br>
+                ⇒ ([] [a] [a a] [a a a] [a a a a])                       
+            </td>
+        </tr>
+
+        
+        <tr>
+            <td class="mono">
+               (<strong>range</strong>) <br>
+               (<strong>range</strong> <em>end</em>) <br>
+               (<strong>range</strong> <em>start</em> <em>end</em>) <br>
+               (<strong>range</strong> <em>start</em> <em>end</em> <em>step</em>)                
+            </td>
+            <td>
+                Returns a lazy sequence of integers beginning at <em>start</em> (inclusive) and containing the successive results of adding <em>step</em> to the previous element up to <em>end</em> (exclusive). <em>start</em> defaults to 0, <em>step</em> to 1, and <em>end</em> to infinity. Returns an empty sequence if <em>step</em> is 0. 
+            </td>
+            <td class="mono">       
+                (range 5) ⇒ (0 1 2 3 4) <br>
+                (range 10 15) ⇒ (10 11 12 13 14) <br>
+                (range 0 10 2) ⇒ (0 2 4 6 8) <br>
+                (range 20 0 -5) ⇒ (20 15 10 5) <br>
+                (take 5 (range)) ⇒ (0 1 2 3 4) <br>
+                (range 10 20 0) ⇒ () <br>                                                   
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>repeat</strong> <em>x</em>) <br>
+               (<strong>repeat</strong> <em>n</em> <em>x</em>)                
+            </td>
+            <td>
+                Returns a lazy sequence which contains <em>n</em> copies of <em>x</em>. If <em>n</em> is not supplied, returns an infinite sequence. 
+            </td>
+            <td class="mono">
+                (repeat 3 'hello) <br>  ⇒ (hello hello hello) <br>
+                (repeat 0 'a) ⇒ () <br>
+                (take 10 (repeat 5)) <br> ⇒ (5 5 5 5 5 5 5 5 5 5)                                                                   
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>reverse</strong> <em>coll</em>)                 
+            </td>
+            <td>
+                Returns a sequence of the items in <em>coll</em> in reverse order. Not lazy. 
+            </td>
+            <td class="mono">
+                 (reverse '(a b c d)) ⇒ (d c b a) <br>                 
+                 (reverse [1 2 [3 4 5 6] 7]) <br>
+                 ⇒ (7 [3 4 5 6] 2 1) <br>
+                 (reverse ()) ⇒ () <br>
+                 (reverse nil) ⇒ ()                                                                   
+            </td>
+        </tr>
+                        
+    </tbody></table>
+    
+    <h2 id="filtering">Filtering Sequences</h2>
+    
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>distinct</strong> <em>coll</em>) 
+            </td>
+            <td>
+                Returns a lazy sequence of the elements of <em>coll</em> with duplicates removed.                                
+            </td>
+            <td class="mono">                
+                (distinct '(a b b a c a)) <br>
+                ⇒ (a b c) <br>
+                (distinct ()) ⇒ () <br>
+                (distinct [1 2 3]) ⇒ (1 2 3)                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>drop</strong> <em>n</em> <em>coll</em>) 
+            </td>
+            <td>
+                Returns a lazy sequence of all but the first <em>n</em> items in <em>coll</em>.                
+            </td>
+            <td class="mono">                
+                (drop 4 '(a b c d e f)) ⇒ (e f) <br>
+                (drop 10 [1 2 3]) ⇒ () <br>
+                (drop 0 [1 2 3]) ⇒ (1 2 3)                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>drop-while</strong> <em>pred</em> <em>coll</em>) 
+            </td>
+            <td>
+                Returns a lazy sequence of the items in <em>coll</em> starting from the first item for which <span class="mono">(<em>pred</em> <em>item</em>)</span> returns false. <em>pred</em> must be free of side-effects.                
+            </td>
+            <td class="mono">                
+                (drop-while even? [2 10 6 3 4 9]) <br>
+                ⇒ (3 4 9) <br>
+                (drop-while pos? [-5 3 10 -1]) <br>
+                ⇒ (-5 3 10 -1) <br>
+                (drop-while neg? []) ⇒ ()                      
+            </td>
+        </tr>        
+        
+        <tr>
+            <td class="mono">
+               (<strong>filter</strong> <em>pred</em> <em>coll</em>) 
+            </td>
+            <td>
+               Returns a lazy sequence of the items in <em>coll</em> for which <span class="mono">(<em>pred</em> <em>item</em>)</span> returns a logical true value. <em>pred</em> must be free of side-effects.             
+            </td>
+            <td class="mono">                
+                (filter even? [5 2 4 10 3]) <br> 
+                ⇒ (2 4 10) <br>
+                (filter #(&lt; % 10) <br>
+                &nbsp;&nbsp;[12 10 5 4 -1 15]) <br>
+                ⇒ (5 4 -1) <br>
+                (filter symbol? <br>
+                &nbsp;&nbsp;'(45 one [] true two)) <br>
+                ⇒ (one two) <br>
+                (filter list? <br>
+                &nbsp;&nbsp;'(45 one [] true two)) <br>
+                ⇒ ()                                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>partition</strong> <em>n</em> <em>coll</em>) <br>
+               (<strong>partition</strong> <em>n</em> <em>step</em> <em>coll</em>) <br>
+               (<strong>partition</strong> <em>n</em> <em>step</em> <em>pad</em> <br>
+               &nbsp;&nbsp;<em>coll</em>)               
+            </td>
+            <td>
+                Returns a lazy sequence of lists of <em>n</em> items each, at offsets <em>step</em> apart. <em>step</em> defaults to <em>n</em> (i.e. the partitions do not overlap). If a <em>pad</em> collection is supplied, use its elements as necessary to complete the last partition up to <em>n</em> items. In case there are not enough padding elements, return a partition with less than <em>n</em> items.                            
+            </td>
+            <td class="mono">                
+                (partition 2 '(a b c d e f g)) <br>
+                ⇒ ((a b) (c d) (e f))<br>
+                (partition 3 2 '(a b c d e f g)) <br>
+                ⇒ ((a b c) (c d e) (e f g)) <br>
+                (partition 2 3 '(a b c d e f g)) <br>
+                ⇒ ((a b) (d e)) <br>
+                (partition <br>
+                &nbsp;&nbsp;3 3 [1 2 3] '(a b c d e f g)) <br>
+                ⇒ ((a b c) (d e f) (g 1 2)) <br>
+                (partition 4 6 [1 2] <br>
+                &nbsp;&nbsp;'(a b c d e f g)) <br>
+                ⇒ ((a b c d) (g 1 2)) <br>
+                (partition 3 ()) ⇒ ()
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>partition-all</strong> <em>n</em> <em>coll</em>) <br>
+               (<strong>partition-all</strong> <em>n</em> <em>step</em> <br>
+               &nbsp;&nbsp;<em>coll</em>)                              
+            </td>
+            <td>
+                Returns a lazy sequence of lists like <code>partition</code>, but may include partitions with fewer than <em>n</em> items at the end.                            
+            </td>
+            <td class="mono">                
+                (partition-all 2 <br>
+                &nbsp;&nbsp;'(a b c d e f g)) <br> 
+                ⇒ ((a b) (c d) (e f) (g)) <br>
+                (partition-all 3 2 <br>
+                &nbsp;&nbsp;'(a b c d e f g)) <br> 
+                ⇒ ((a b c) (c d e) (e f g) (g)) <br>
+                (partition-all 4 6 <br>
+                &nbsp;&nbsp;'(a b c d e f g)) <br>
+                ⇒ ((a b c d) (g)) <br>
+                (partition-all 3 ()) ⇒ ()
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>partition-by</strong> <em>f</em> <em>coll</em>)                                             
+            </td>
+            <td>
+                Applies <em>f</em> to each item in <em>coll</em>, splitting it each time <em>f</em> returns a new value. Returns a lazy sequence of partitions.                            
+            </td>
+            <td class="mono">                
+                (partition-by neg? <br>
+                &nbsp;&nbsp;[3 -4 -5 10 1 0 -2 -1 4]) <br>
+                ⇒ ((3) (-4 -5) (10 1 0) (-2 -1) <br>
+                &nbsp;&nbsp;(4)) <br>
+                (partition-by <br>
+                &nbsp;&nbsp;first [[1] [1 2] [] [2 3] [2] <br>
+                &nbsp;&nbsp;[3]]) <br>
+                ⇒ (([1] [1 2]) ([]) ([2 3] [2]) <br>
+                &nbsp;&nbsp;([3])) <br>
+                (partition-by even? ()) ⇒ ()
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>remove</strong> <em>pred</em> <em>coll</em>) 
+            </td>
+            <td>
+               Returns a lazy sequence of the items in <em>coll</em> for which <span class="mono">(<em>pred</em> <em>item</em>)</span> returns a logical false value. <em>pred</em> must be free of side-effects.             
+            </td>
+            <td class="mono">                
+                (remove even? [5 2 4 10 3]) <br>
+                ⇒ (5 3) <br>
+                (remove #(&lt; % 10) <br>
+                &nbsp;&nbsp;[12 10 5 4 -1 15]) <br>
+                ⇒ (12 10 15) <br>
+                (remove symbol? <br>
+                &nbsp;&nbsp;'(45 one [] true two)) <br>
+                ⇒ (45 [] true) <br>
+                (remove list? <br>
+                &nbsp;&nbsp;'(45 one [] true two)) <br>
+                ⇒ (45 one [] true two)                                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>split-at</strong> <em>n</em> <em>coll</em>) 
+            </td>
+            <td>
+               Returns the vector: <br>
+               <span class="mono">[(take <em>n</em> <em>coll</em>) 
+               (drop <em>n</em> <em>coll</em>)]</span>             
+            </td>
+            <td class="mono">                
+                (split-at 4 '(a b c d e f)) <br>
+                ⇒ [(a b c d) (e f)] <br>
+                (split-at 0 '(a b c d e f)) <br>
+                ⇒ [() (a b c d e f)] <br>
+                (split-at 100 '(a b c d e f)) <br>
+                ⇒ [(a b c d e f) ()] <br>                                      
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>split-with</strong> <em>pred</em> <em>coll</em>) 
+            </td>
+            <td>
+               Returns the vector: <br>
+               <span class="mono">[(take-while <em>pred</em> <em>coll</em>) <br>
+               &nbsp;(drop-while <em>pred</em> <em>coll</em>)]</span>             
+            </td>
+            <td class="mono">                
+                (split-with even? [2 10 6 3 4 9]) <br>
+                ⇒ [(2 10 6) (3 4 9)] <br>
+                (split-with pos? [-5 3 10 -1]) <br>
+                ⇒ [() (-5 3 10 -1)] <br>
+                (split-with neg? []) <br>
+                ⇒ [() ()]                                      
+            </td>
+        </tr>        
+    
+        <tr>
+            <td class="mono">
+               (<strong>take</strong> <em>n</em> <em>coll</em>)                              
+            </td>
+            <td>
+                Returns a lazy sequence of the first <em>n</em> items in <em>coll</em>, or all items if there are fewer than <em>n</em>. Calls <code>seq</code> on <em>coll</em>.
+            </td>
+            <td class="mono">
+                (take 3 [1 2 3 4 5]) ⇒ (1 2 3) <br>
+                (take 5 [1 2 3]) ⇒ (1 2 3) <br>
+                (take 5 "hello world") <br>
+                ⇒ (\h \e \l \l \o) <br>
+                (take 0 [1 2 3 4]) ⇒ () <br>
+                (take 5 []) ⇒ ()                                                                   
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>take-while</strong> <em>pred</em> <em>coll</em>)                              
+            </td>
+            <td>
+                Returns a lazy sequence of successive items from <em>coll</em> while <span class="mono">(<em>pred</em> <em>item</em>)</span> returns true. <em>pred</em> must be free of side-effects.
+            </td>
+            <td class="mono">
+                (take-while even? [2 10 6 3 4 9]) <br>
+                ⇒ (2 10 6) <br>
+                (take-while pos? <br>
+                &nbsp;&nbsp;[-5 3 10 -1]) <br>
+                ⇒ () <br>
+                (take-while neg? []) ⇒ ()                                                                   
+            </td>
+        </tr>
+    </tbody></table>
+    
+    <h2 id="transforming">Transforming Sequences</h2>
+    
+    <table>    
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function/Macro
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>for</strong> <em>seq-exprs</em> <em>body-expr</em>)
+            </td>
+            <td>
+                <p>
+                    Sequence comprehension. Takes a vector of one or 
+more binding-form/collection-expression pairs, each followed by zero or 
+more modifiers, and yields a lazy sequence of evaluations of <em>body-expr</em>.
+ Collections are iterated in a nested fashion, rightmost fastest, and 
+nested collection-expressions can refer to bindings created in prior 
+binding-forms.    
+                </p>
+                
+                <p>
+                    Supported modifiers are:    
+                </p>
+                
+                <ul>
+                    <li><span class="mono">:let [<em>binding</em> <em>expr</em> ...]</span></li>
+                    <li><span class="mono">:while <em>test</em></span></li>
+                    <li><span class="mono">:when <em>test</em></span></li>
+                </ul>                                                               
+            </td>
+            <td class="mono">                
+                (for [i [1 2 3 4 5]] (* i i)) <br>
+                ⇒ (1 4 9 16 25) <br>
+                (for [i [1 2 3 4 5] <br>
+                &nbsp;&nbsp;:let [x (* i i)]] x) <br> 
+                ⇒ (1 4 9 16 25) <br>
+                (for [i [1 2 3 4 5] <br>
+                &nbsp;&nbsp;:when (even? i)] (* i i)) <br>
+                ⇒ (4 16) <br>                
+                (for [i '(1 2 3 a b c 4 5 6) <br>
+                &nbsp;&nbsp;:while (number? i)] (* i i)) <br> 
+                ⇒ (1 4 9) <br>                                
+                (for [i [1 2 3 4 5] <br>
+                &nbsp;&nbsp;:let [x (* i i)] <br>
+                &nbsp;&nbsp;:when (odd? x)] [i x]) <br> 
+                ⇒ ([1 1] [3 9] [5 25]) <br>
+                (for [x '(a b) y [1 2 3]] [x y]) <br>
+                ⇒ ([a 1] [a 2] [a 3] [b 1] [b 2] <br>
+                &nbsp;&nbsp;[b 3])
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>map</strong> <em>f</em> <em>coll</em> &amp; <em>colls</em>)
+            </td>
+            <td>
+                Returns a lazy sequence consisting of the result of applying <em>f</em> to the set of first items of each <em>coll</em>, followed by applying <em>f</em> to the set of second items in each <em>coll</em>, and so on until any one of the <em>colls</em> is exhausted. Any remaining items in other <em>colls</em> are ignored. Function <em>f</em> should accept <em>n</em> arguments, where <em>n</em> is the total number of <em>colls</em>.                
+            </td>
+            <td class="mono">                
+                (map inc [10 -1 0 5 -4]) <br>
+                ⇒ (11 0 1 6 -3) <br>    
+                (map dec ()) ⇒ () <br>
+                (map + [1 2 3 4 5 6] [10 20 30] <br>
+                &nbsp;&nbsp;[100 200 300 400]) <br> 
+                ⇒ (111 222 333) <br>
+                (map pos? [4 -10 8 0 -5]) <br>
+                ⇒ (true false true false false)
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>mapcat</strong> <em>f</em> &amp; <em>colls</em>)
+            </td>
+            <td>
+                Returns the result of applying <code>concat</code> to the result of applying <code>map</code> to <em>f</em> and <em>colls</em>.  Thus, function <em>f</em> should return a collection.                                
+            </td>
+            <td class="mono">
+                (mapcat rest '((1 2 3 4) <br>
+                &nbsp;&nbsp;(5 6 7) (8 9) (10))) <br>
+                ⇒ (2 3 4 6 7 9) <br>
+                (mapcat reverse '((1 2 3) <br>                
+                &nbsp;&nbsp;(a b c) (:x :y))) <br>
+                ⇒ (3 2 1 c b a :y :x) <br>                
+                (mapcat #(list % 'x) '(1 2 3 4)) <br>  
+                ⇒ (1 x 2 x 3 x 4 x) <br>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">               
+               (<strong>map-indexed</strong> <em>f</em> <em>coll</em>)
+            </td>
+            <td>
+                Returns a lazy sequence consisting of the result of applying <em>f</em> to 0 and the first item of <em>coll</em>, followed by applying <em>f</em> to 1 and the second item in <em>coll</em>, and so on, until <em>coll</em> is exhausted. Thus, function <em>f</em> should accept 2 arguments, <em>index</em> and <em>item</em>.                                
+            </td>
+            <td class="mono">
+                (map-indexed vector '(a b c d)) <br>
+                ⇒ ([0 a] [1 b] [2 c] [3 d]) <br>
+                (map-indexed + [1 1 1 1]) <br>      
+                ⇒ (1 2 3 4) <br>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>reduce</strong> <em>f</em> <em>coll</em>) <br>
+               (<strong>reduce</strong> <em>f</em> <em>val</em> <em>coll</em>) 
+            </td>
+            <td>
+                <p>
+                    <em>f</em> should be a function of two arguments.
+                </p>
+                    
+                <p>
+                    If <em>val</em> is not supplied, returns the result of applying <em>f</em> to the first two items in <em>coll</em>, then applying <em>f</em> to that result and the third item, and so on. If <em>coll</em> contains no items, <em>f</em> must accept no arguments as well, and reduce returns the result of calling <em>f</em> with no arguments. If <em>coll</em> has only one item, it is returned and <em>f</em> is not called.    
+                </p>
+                
+                <p>
+                    If <em>val</em> is supplied, returns the result of applying <em>f</em> to <em>val</em> and the first item in <em>coll</em>, then applying <em>f</em> to that result and the second item, and so on. If <em>coll</em> contains no items, returns <em>val</em> and <em>f</em> is not called.    
+                </p>                                                                
+            </td>
+            <td class="mono">                
+                (reduce + [1 2 3 4 5]) ⇒ 15 <br>
+                (reduce + []) ⇒ 0 <br>
+                (reduce + [42]) ⇒ 42 <br>
+                (reduce * 10 [1 2 3]) ⇒ 60 <br>
+                (reduce * 10 []) ⇒ 10 <br>
+                (reduce conj () [1 2 3]) ⇒ (3 2 1)                
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>sort</strong> <em>coll</em>) <br>
+               (<strong>sort</strong> <em>comp</em> <em></em> <em>coll</em>) 
+            </td>
+            <td>
+                <p>
+                    Returns a sorted sequence of the items in <em>coll</em>. 
+                </p>
+                
+                <p>
+                    <em>comp</em> is a function that takes two arguments: <em>x</em> and <em>y</em>. It should return a negative number, zero, or a positive number when <em>x</em> is logically "less than", "equal to", or "greater than" <em>y</em>, respectively. If <em>comp</em> is not supplied, the <code>compare</code> function is used instead.    
+                </p>
+            </td>
+            <td class="mono">                
+                (sort [4 6 1 10 9 3 2 8 5 7]) <br>
+                ⇒ (1 2 3 4 5 6 7 8 9 10) <br>
+                (sort ()) ⇒ () <br>  
+                (sort <br>
+                &nbsp;&nbsp;#(- %2 %1) <br>
+                &nbsp;&nbsp;[4 6 1 10 9 3 2 8 5 7]) <br>
+                ⇒ (10 9 8 7 6 5 4 3 2 1)
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>sort-by</strong> <em>keyfn</em> <em>coll</em>) <br>
+               (<strong>sort-by</strong> <em>keyfn</em> <em>comp</em> <em></em> <em>coll</em>) 
+            </td>
+            <td>
+                <p>
+                    Returns a sorted sequence of the items in <em>coll</em>, where the sort order is determined by comparing <span class="mono">(<em>keyfn</em> <em>item</em>)</span>. 
+                </p>
+                
+                <p>
+                    <em>comp</em> is a function as described in <code>sort</code>. If <em>comp</em> is not supplied, the <code>compare</code> function is used instead.  
+                </p>
+            </td>
+            <td class="mono">                
+                (sort-by <br>
+                &nbsp;&nbsp;#(Math/abs %) <br>
+                &nbsp;&nbsp;[2 5 -2 3 0 -1 4 1]) <br>
+                ⇒ (0 -1 1 2 -2 3 4 5) <br>
+                (sort-by <br>
+                &nbsp;&nbsp;#(Math/abs %) #(- %2 %1) <br>
+                &nbsp;&nbsp;[2 5 -2 3 0 -1 4 1]) <br>
+                ⇒ (5 4 3 2 -2 -1 1 0) <br>
+                (sort-by :grade <br> 
+                &nbsp;&nbsp;[{:name "Mary" :grade 92} <br>
+                &nbsp;&nbsp;&nbsp;{:name "John" :grade 78} <br>
+                &nbsp;&nbsp;&nbsp;{:name "Jane" :grade 85}]) <br>
+                ⇒ ({:name "John", :grade 78} <br> 
+                &nbsp;&nbsp;&nbsp;{:name "Jane", :grade 85} <br>
+                &nbsp;&nbsp;&nbsp;{:name "Mary", :grade 92})
+            </td>
+        </tr>
+        
+    </tbody></table>
+    
+    <h2 id="lazy">Creating Lazy Sequences</h2>
+    
+    <table>    
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Macro
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>lazy-seq</strong> &amp; <em>body</em>)                              
+            </td>
+            <td>
+                Takes a body of expressions that returns a sequence or <code>nil</code>, and yields a seqable object that will invoke  <em>body</em> only the first time <code>seq</code> is called, and will cache the result and return it on all subsequent <code>seq</code> calls.
+            </td>
+            <td class="mono">
+                (defn f [n] <br>
+                &nbsp;&nbsp;(lazy-seq (cons n (f n)))) <br>
+                (take 10 (f 0)) <br>
+                ⇒ (0 0 0 0 0 0 0 0 0 0)
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="mono">
+               (<strong>lazy-cat</strong> &amp; <em>colls</em>)                              
+            </td>
+            <td>
+                <p>
+                    Expands to code which yields a lazy sequence of the concatenation of the supplied <em>colls</em>.  Each <em>coll</em> expression is not evaluated until it is needed.    
+                </p>
+                <p class="mono">
+                    (lazy-cat a b c) ≡ <br>
+                    &nbsp;&nbsp;(concat (lazy-seq a) <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;(lazy-seq b) <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;(lazy-seq c))  
+                </p>
+                
+            </td>
+            <td class="mono">
+                (def x (lazy-cat (range 5) <br>
+                &nbsp;&nbsp;(repeat 0))) <br>
+                (take 10 x) <br>
+                ⇒ (0 1 2 3 4 0 0 0 0 0)
+            </td>
+        </tr>
+        
+    </tbody></table>
+    
+    <h2 id="side_effect">Side Effect Oriented Operations</h2>        
+           
+    <table>
+        <colgroup><col style="width: 250px">
+        <col>
+        <col style="width: 350px">
+        
+        </colgroup><tbody><tr>
+            <th>
+                Function/Macro
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Examples
+            </th>
+        </tr>        
+        <tr>        
+            <td class="mono">               
+                (<strong>doall</strong> <em>s</em>)
+            </td>
+            <td>
+                When lazy sequences are produced via functions that have
+ side effects, any effects other than those needed to produce the first 
+element in the seq <em>s</em> do not occur until the seq is consumed. <code>doall</code>
+ can be used to force any effects. Walks through the successive nexts of
+ the seq, retains the head and returns it, thus causing the entire seq 
+to reside in memory at one time.                  
+            </td>
+            <td class="mono">
+                (def m (map #(println %) (range 5)))<br>
+                (doall m)<br>
+                <em>;;; Prints:</em><br>
+                0 <br>  
+                1 <br>
+                2 <br>
+                3 <br>
+                4 <br>
+                ⇒ (nil nil nil nil nil)    
+            </td>
+        </tr>
+        <tr>        
+            <td class="mono">               
+                (<strong>dorun</strong> <em>s</em>)
+            </td>
+            <td>
+                When lazy sequences are produced via functions that have
+ side effects, any effects other than those needed to produce the first 
+element in the seq <em>s</em> do not occur until the seq is consumed. <code>dorun</code> can be used to force any effects. Walks through the successive nexts of the seq, does not retain the head and returns <code>nil</code>. 
+            </td>
+            <td class="mono">
+                (def m (map #(println %) (range 5))) <br>
+                (dorun m) <br>
+                <em>;;; Prints:</em><br>
+                0 <br>
+                1 <br>
+                2 <br>
+                3 <br>
+                4 <br>
+                ⇒ nil
+            </td>
+        </tr>
+        <tr>        
+            <td class="mono">               
+                (<strong>doseq</strong> <em>seq-exprs</em> <em>body-expr</em>)
+            </td>
+            <td>
+                Repeatedly executes <em>body-expr</em> (presumably for side-effects) with bindings and filtering as provided by the <code>for</code> macro.  Does not retain the head of the seq. Returns <code>nil</code>. 
+            </td>
+            <td class="mono">
+                (doseq [i (range 5)] (println i)) <br>
+                <em>;;; Prints:</em><br>
+                0 <br>
+                1 <br>
+                2 <br>
+                3 <br>
+                4 <br>
+                ⇒ nil    
+            </td>
+        </tr>
+    </tbody></table>
+            
+
+    
+    </div>
+    
+</body></html>
